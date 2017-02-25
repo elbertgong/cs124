@@ -1,17 +1,13 @@
-// can you think of a way to combine functions so that we don't have unique ones for each dimension?
-// For instance, insert2 and insert0 are almost the same.. any idea how to integrate them?
-// maybe separate the insert and delete functions into a header file
-
-
-// Big Important issues:
-// need to guess a value for k(numpoints)
-// need to make it faster somehow- the 0D one can't get up to 20000 (fib heaps?)
-// run things and actually create the chart
-// writeup: procedure and discussion
-// need to comment this up better- my fault.
-// Exponential backoff, solve analytically for k
-// Valgrind this
-
+// TODO!!!!!!!!!!!!!!!
+// Run things and actually create the chart
+// Writeup: procedure, analysis, and discussion
+// Get the makefiles and program to work on remote Linux
+// Exponential backoff, solve analytically for k(numpoints)
+// Test code under valgrind
+// Keep track of potential optimizations (maybe instead of crawling
+// in deletemin0 just iterate thru points for min where searched == 1,
+// remove assert statements before submitting, change the initialization
+// value for (points + i)->dist)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,36 +18,41 @@
 #include <string.h>
 
 
+// elements in the adjacency lists are nodes
 typedef struct node0 {
 	int vertex;
 	float dist;
 	struct node0* next;
 } node0;
 
+// each vertex gets represented by a point
 typedef struct {
 	node0* neighbors;
 	float dist;
 	unsigned char searched;
+	// searched: 0 means not inserted into heap, 1 means inserted not deleted, 2 means deleted
 } point0;
 
+// heapnodes will live in the linked list heap
 typedef struct heapnode0 {
 	point0* p;
 	struct heapnode0* prev;
 	struct heapnode0* next;
 } heapnode0;
 
-// Global heap for 2D graph
+// global heap for 0D graph
 static heapnode0* heap0;
 
 // void insert0(point0* point, float dist)
-//		Insert0 into the heap (or updates an existing heap node)
+//		insert into the heap (or updates an existing heap node)
 void insert0(point0* point, float dist) {
+	// update distance
 	point->dist = dist;
 	assert(point->searched != 2);
 	if (point->searched == 1) return;
 	point->searched = 1;
 	
-	// actually put a new node into the heap
+	// actually insert a new node into the heap
 	heapnode0* n = malloc(sizeof(heapnode0));
 	n->p = point;
 	n->prev = NULL;
@@ -97,43 +98,43 @@ point0* deletemin0() {
 
 // float mst0(int numpoints)
 //		Returns the length of a randomly-generated 0D MST
-// for this one, generate numpoints random numbers and return max - min
 float mst0(int numpoints) {
     point0* points = malloc(sizeof(point0) * numpoints);
 	for (int i = 0; i < numpoints; i++) {
 		(points + i)->neighbors = NULL;
-		(points + i)->dist = 10; // i know it's dumb, it just has to be bigger than sqrt(26)
+		(points + i)->dist = 10;
 		(points + i)->searched = 0;
+
+		// add neighbors
 		for (int j = 0; j < i; j++) {
 			float dist_ij = (float) rand() / RAND_MAX;
-			if (dist_ij < 1) { // later change to k(numpoints)
-
+			if (dist_ij < 1) { // change to k(numpoints)
 				// add point i as a neighbor to point j
-				node0* new = malloc(sizeof(node0));
-				new->vertex = i;
-				new->dist = dist_ij;
+				node0* fromj = malloc(sizeof(node0));
+				fromj->vertex = i;
+				fromj->dist = dist_ij;
 				if ((points + j)->neighbors) {
-					new->next = (points + j)->neighbors;
+					fromj->next = (points + j)->neighbors;
 				}
 				else {
-					new->next = NULL;
+					fromj->next = NULL;
 				}
-				(points + j)->neighbors = new;
+				(points + j)->neighbors = fromj;
 				// add point j as a neighbor to point i
-				node0* new2 = malloc(sizeof(node0));
-				new2->vertex = j;
-				new2->dist = dist_ij;
+				node0* fromi = malloc(sizeof(node0));
+				fromi->vertex = j;
+				fromi->dist = dist_ij;
 				if ((points + i)->neighbors) {
-					new2->next = (points + i)->neighbors;
+					fromi->next = (points + i)->neighbors;
 				}
 				else {
-					new2->next = NULL;
+					fromi->next = NULL;
 				}
-				(points + i)->neighbors = new2;
+				(points + i)->neighbors = fromi;
 			}
 		}
 	}
-	// pretend we've added the first point into the heap
+	// since we're going to add the first point into the heap
     points[0].dist = 0;
     points[0].searched = 1;
 
@@ -143,6 +144,7 @@ float mst0(int numpoints) {
 	heap0->prev = NULL;
 	heap0->next = NULL;
 
+	// prim's algorithm
 	while(heap0 != NULL) {
 		point0* p = deletemin0();
 		// printf("newmin %f %f %f %d\n", p->x, p->y, p->dist, p->searched);
@@ -161,6 +163,7 @@ float mst0(int numpoints) {
 		}
 	}
 
+	// find the total length of the mst
 	float total = 0;
 	for (int i = 0; i < numpoints; i++) {
 		assert((points + i)->searched == 2);
@@ -170,6 +173,8 @@ float mst0(int numpoints) {
 	return total;
 }
 
+
+// each vertex gets represented by a point
 typedef struct {
 	float x;
 	float y;
@@ -180,28 +185,30 @@ typedef struct {
 	// searched: 0 means not inserted into heap, 1 means inserted not deleted, 2 means deleted
 } point;
 
+// nodes will live in the linked list heap
 typedef struct node {
 	point* p;
 	struct node* prev;
 	struct node* next;
 } node;
 
-// Global heap for 2D graph
+// global heap for non-0D graph
 static node* heap;
 
 // void insert(point* point, float dist)
-//		Inserts into the heap (or updates an existing heap node)
+//		inserts into the heap (or updates an existing heap node)
 void insert(point* point, float dist) {
+	// update distance
 	point->dist = dist;
 	assert(point->searched != 2);
 	if (point->searched == 1) return;
 	point->searched = 1;
 	
-	// Malloc new node onto the linked list
+	// actually insert a new node into the heap
 	node* n = malloc(sizeof(node));
 	n->p = point;
 	n->prev = NULL;
-	if (heap) { // Push new node onto head
+	if (heap) {
 		n->next = heap;
 		heap->prev = n;
 	}
@@ -265,12 +272,12 @@ float mst(int numpoints, int dim) {
 	for (int i = 0; i < numpoints; i++) {
 		(points + i)->x = (float) rand() / RAND_MAX;
 		(points + i)->y = (float) rand() / RAND_MAX;
-		(points + i)->z = (dim == 3 || dim == 4) ? ((float) rand() / RAND_MAX) ? 0.0;
-		(points + i)->w = (dim == 4) ? ((float) rand() / RAND_MAX) ? 0.0;
-
-		(points + i)->dist = 10; // i know it's dumb, it just has to be bigger than sqrt(26)
+		(points + i)->z = (dim == 3 || dim == 4) ? ((float) rand() / RAND_MAX) : 0.0;
+		(points + i)->w = (dim == 4) ? ((float) rand() / RAND_MAX) : 0.0;
+		(points + i)->dist = 10;
 		(points + i)->searched = 0;
 	}
+	// since we're going to add the first point into the heap
     points[0].dist = 0;
     points[0].searched = 1;
     
@@ -281,19 +288,21 @@ float mst(int numpoints, int dim) {
     } 
     
     heap = malloc(sizeof(node));
+    // first thing in the heap will be the first point
 	heap->p = points;
 	heap->prev = NULL;
 	heap->next = NULL;
 
+	// prim's algorithm
 	while(heap != NULL) {
 		point* p = deletemin();
 		printf("newmin (%f, %f, %f, %f) %f %d\n", 
 			p->x, p->y, p->z, p->w, p->dist, p->searched);
-		
+
 		// look for new edges and potentially insert them into linked list
 		for (int i = 0; i < numpoints; i++) {
 			if ((points + i)->searched == 0 || (points + i)->searched == 1) {
-				float length = closer(p, points + i, numpoints);
+				float length = closer(p, points + i, numpoints, dim);
 				if (length >= 0) {
 					(points + i)->dist = length;
 					insert((points + i), length);
@@ -302,6 +311,7 @@ float mst(int numpoints, int dim) {
 		}
 	}
 
+	// find the total length of the mst
 	float total = 0;
 	for (int i = 0; i < numpoints; i++) {
 		assert((points + i)->searched == 2);
@@ -331,16 +341,12 @@ int main(int argc, char** argv) {
     			cumul += mst0(numpoints);
     		    break;
     		case 2:
-    			cumul += mst(numpoints, dimensions);
-    			break;
     		case 3:
-    			cumul += mst(numpoints, dimensions);
-    			break;
     		case 4:
-    			cumul += mst4(numpoints, dimensions);
+    			cumul += mst(numpoints, dimensions);
     			break;
     		default :
-   			printf("Usage: invalid dimension\n");
+   				printf("Usage: invalid dimension\n");
    			return 1;
 		}
 	}
