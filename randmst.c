@@ -7,7 +7,8 @@
 // need to guess a value for k(numpoints)
 // need to make it faster somehow- the 0D one can't get up to 20000 (fib heaps?)
 // run things and actually create the chart
-// writeup: procedure and discussion
+// writeup: procedure, analysis, and discussion
+// makefiles work.
 // need to comment this up better- my fault.
 // Exponential backoff, solve analytically for k
 // Valgrind this
