@@ -171,40 +171,38 @@ float mst0(int numpoints) {
 	return total;
 }
 
-
-
-
-
 typedef struct {
 	float x;
 	float y;
+	float z; 
+	float w;
 	float dist;
 	unsigned char searched;
 	// searched: 0 means not inserted into heap, 1 means inserted not deleted, 2 means deleted
-} point2;
+} point;
 
-typedef struct node2 {
-	point2* p;
-	struct node2* prev;
-	struct node2* next;
-} node2;
+typedef struct node {
+	point* p;
+	struct node* prev;
+	struct node* next;
+} node;
 
 // Global heap for 2D graph
-static node2* heap;
+static node* heap;
 
-// void insert2(point2* point, float dist)
+// void insert(point* point, float dist)
 //		Inserts into the heap (or updates an existing heap node)
-void insert2(point2* point, float dist) {
+void insert(point* point, float dist) {
 	point->dist = dist;
 	assert(point->searched != 2);
 	if (point->searched == 1) return;
 	point->searched = 1;
 	
-	// actually put a new node into the linked list
-	node2* n = malloc(sizeof(node2));
+	// Malloc new node onto the linked list
+	node* n = malloc(sizeof(node));
 	n->p = point;
 	n->prev = NULL;
-	if (heap) {
+	if (heap) { // Push new node onto head
 		n->next = heap;
 		heap->prev = n;
 	}
@@ -215,11 +213,11 @@ void insert2(point2* point, float dist) {
 }
 
 
-// point2* deletemin2(node2* heap)
+// point* deletemin(node* heap)
 //		Deletes min from heap and returns it
-point2* deletemin2() {
-	node2* crawler = heap;
-	node2* minptr = heap;
+point* deletemin() {
+	node* crawler = heap;
+	node* minptr = heap;
 	while (crawler != NULL) {
 		if (crawler->p->dist < minptr->p->dist)
 			minptr = crawler;
@@ -236,30 +234,41 @@ point2* deletemin2() {
 	if (minptr->next) {
 		minptr->next->prev = minptr->prev;
 	}
-	point2* x = minptr->p;
+	point* x = minptr->p;
 	assert (x->searched == 1);
 	x->searched = 2;
 	free(minptr);
 	return x;
 }
 
-// float closer2(point2* p, point2* q, int numpoints)
+// float closer(point* p, point* q, int numpoints, int dim)
 //		Returns a new distance if the distance between p and q is less than
 //		q's original "distance" and less than k(numpoints), -1 otherwise
-float closer2(point2* p, point2* q, int numpoints) {
-	float newdist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2));
+float closer(point* p, point* q, int numpoints, int dim) {
+	float newdist = 1;
+	if(dim == 2)
+		newdist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2));
+	else if (dim == 3)
+		newdist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2) 
+			+ pow((p->z - q->z), 2));
+	else if (dim == 4)
+		newdist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2) 
+			+ pow((p->z - q->z), 2) + pow((p->w - q->w), 2));
 	if (newdist >= q->dist || newdist >= 1) return -1; // replace the 1 with k(numpoints)
 	return newdist;
 }
 
 
-// float mst2(int numpoints)
+// float mst(int numpoints, int dim)
 //		Returns the length of a randomly-generated 2D MST
-float mst2(int numpoints) {
-	point2* points = malloc(sizeof(point2) * numpoints);
+float mst(int numpoints, int dim) {
+	point* points = malloc(sizeof(point) * numpoints);
 	for (int i = 0; i < numpoints; i++) {
 		(points + i)->x = (float) rand() / RAND_MAX;
 		(points + i)->y = (float) rand() / RAND_MAX;
+		(points + i)->z = (dim == 3 || dim == 4) ? ((float) rand() / RAND_MAX) ? 0.0;
+		(points + i)->w = (dim == 4) ? ((float) rand() / RAND_MAX) ? 0.0;
+
 		(points + i)->dist = 10; // i know it's dumb, it just has to be bigger than sqrt(26)
 		(points + i)->searched = 0;
 	}
@@ -271,22 +280,22 @@ float mst2(int numpoints) {
         printf("origpo %f %f %f %d\n", (points+i)->x, (points+i)->y, (points+i)->dist, (points+i)->searched);
     } */
     
-    heap = malloc(sizeof(node2));
+    heap = malloc(sizeof(node));
 	heap->p = points;
 	heap->prev = NULL;
 	heap->next = NULL;
 
 	while(heap != NULL) {
-		point2* p = deletemin2();
+		point* p = deletemin();
 		// printf("newmin %f %f %f %d\n", p->x, p->y, p->dist, p->searched);
 		
 		// look for new edges and potentially insert them into linked list
 		for (int i = 0; i < numpoints; i++) {
 			if ((points + i)->searched == 0 || (points + i)->searched == 1) {
-				float length = closer2(p, points + i, numpoints);
+				float length = closer(p, points + i, numpoints);
 				if (length >= 0) {
 					(points + i)->dist = length;
-					insert2((points + i), length);
+					insert((points + i), length);
 				}
 			}
 		}
@@ -300,26 +309,6 @@ float mst2(int numpoints) {
 	free(points);
 	return total;
 }
-
-
-// float mst3(int numpoints)
-//		Returns the length of a randomly-generated 3D MST
-float mst3(int numpoints) {
-    printf("mst3 not implemented\n");
-    return 0;
-}
-
-
-// float mst4(int numpoints)
-//		Returns the length of a randomly-generated 4D MST
-float mst4(int numpoints) {
-    printf("mst4 not implemented\n");
-    return 0;
-}
-
-
-
-
 
 int main(int argc, char** argv) {
 	if (argc != 5) {
@@ -341,13 +330,13 @@ int main(int argc, char** argv) {
     			cumul += mst0(numpoints);
     		    break;
     		case 2:
-    			cumul += mst2(numpoints);
+    			cumul += mst(numpoints, dimensions);
     			break;
     		case 3:
-    			cumul += mst3(numpoints);
+    			cumul += mst(numpoints, dimensions);
     			break;
     		case 4:
-    			cumul += mst4(numpoints);
+    			cumul += mst4(numpoints, dimensions);
     			break;
     		default :
    			printf("Usage: invalid dimension\n");
