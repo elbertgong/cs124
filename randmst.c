@@ -330,16 +330,12 @@ int main(int argc, char** argv) {
     			cumul += mst0(numpoints);
     		    break;
     		case 2:
-    			cumul += mst(numpoints, dimensions);
-    			break;
     		case 3:
-    			cumul += mst(numpoints, dimensions);
-    			break;
     		case 4:
-    			cumul += mst4(numpoints, dimensions);
+    			cumul += mst(numpoints, dimensions);
     			break;
     		default :
-   			printf("Usage: invalid dimension\n");
+   				printf("Usage: invalid dimension\n");
    			return 1;
 		}
 	}
