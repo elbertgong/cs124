@@ -274,10 +274,11 @@ float mst(int numpoints, int dim) {
     points[0].dist = 0;
     points[0].searched = 1;
     
-    /* To see all points
+    // To see all points
     for (int i = 0; i < numpoints; i++) {
-        printf("origpo %f %f %f %d\n", (points+i)->x, (points+i)->y, (points+i)->dist, (points+i)->searched);
-    } */
+        printf("(%f, %f, %f, %f) dist:%f searched:%d\n", (points+i)->x, (points+i)->y, 
+        	(points+i)->z, (points+i)->w, (points+i)->dist, (points+i)->searched);
+    } 
     
     heap = malloc(sizeof(node));
 	heap->p = points;
@@ -286,7 +287,8 @@ float mst(int numpoints, int dim) {
 
 	while(heap != NULL) {
 		point* p = deletemin();
-		// printf("newmin %f %f %f %d\n", p->x, p->y, p->dist, p->searched);
+		printf("newmin (%f, %f, %f, %f) %f %d\n", 
+			p->x, p->y, p->z, p->w, p->dist, p->searched);
 		
 		// look for new edges and potentially insert them into linked list
 		for (int i = 0; i < numpoints; i++) {
