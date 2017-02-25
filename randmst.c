@@ -104,6 +104,8 @@ float mst0(int numpoints) {
 		for (int j = 0; j < i; j++) {
 			float dist_ij = (float) rand() / RAND_MAX;
 			if (dist_ij < 1) { // later change to k(numpoints)
+
+				// maybe abstract out the process of inserting into a neighbors?
 				node0* new = malloc(sizeof(node0));
 				new->vertex = i;
 				new->dist = dist_ij;
@@ -114,6 +116,18 @@ float mst0(int numpoints) {
 					new->next = NULL;
 				}
 				(points + j)->neighbors = new;
+				/*
+				node0* new2 = malloc(sizeof(node0));
+				new2->vertex = j;
+				new->dist = dist_ij;
+				if ((points + i)->neighbors) {
+					new2->next = (points + i)->neighbors;
+				}
+				else {
+					new2->next = NULL;
+				}
+				(points + i)->neighbors = new2;
+				*/
 			}
 		}
 	}
@@ -128,7 +142,7 @@ float mst0(int numpoints) {
 	while(heap0 != NULL) {
 		point0* p = deletemin0();
 		// printf("newmin %f %f %f %d\n", p->x, p->y, p->dist, p->searched);
-		
+		 
 		// look for new edges and potentially insert them into linked list
 		while (p->neighbors) {
 			point0* neighbor = points + p->neighbors->vertex;
