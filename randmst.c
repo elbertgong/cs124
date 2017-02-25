@@ -4,10 +4,13 @@
 
 
 // Big Important issues:
-// need to implement/determine k(numpoints). 
-// need to implement the other dimensions.
-// need to make it faster somehow- the 0D one can't get up to 20000
+// need to guess a value for k(numpoints)
+// need to make it faster somehow- the 0D one can't get up to 20000 (fib heaps?)
+// run things and actually create the chart
+// writeup: procedure and discussion
 // need to comment this up better- my fault.
+// Exponential backoff, solve analytically for k
+// Valgrind this
 
 
 #include <stdio.h>
@@ -105,7 +108,7 @@ float mst0(int numpoints) {
 			float dist_ij = (float) rand() / RAND_MAX;
 			if (dist_ij < 1) { // later change to k(numpoints)
 
-				// maybe abstract out the process of inserting into a neighbors?
+				// add point i as a neighbor to point j
 				node0* new = malloc(sizeof(node0));
 				new->vertex = i;
 				new->dist = dist_ij;
@@ -116,10 +119,10 @@ float mst0(int numpoints) {
 					new->next = NULL;
 				}
 				(points + j)->neighbors = new;
-				/*
+				// add point j as a neighbor to point i
 				node0* new2 = malloc(sizeof(node0));
 				new2->vertex = j;
-				new->dist = dist_ij;
+				new2->dist = dist_ij;
 				if ((points + i)->neighbors) {
 					new2->next = (points + i)->neighbors;
 				}
@@ -127,14 +130,15 @@ float mst0(int numpoints) {
 					new2->next = NULL;
 				}
 				(points + i)->neighbors = new2;
-				*/
 			}
 		}
 	}
+	// pretend we've added the first point into the heap
     points[0].dist = 0;
     points[0].searched = 1;
 
     heap0 = malloc(sizeof(heapnode0));
+    // first thing in the heap will be the first point
 	heap0->p = points;
 	heap0->prev = NULL;
 	heap0->next = NULL;
@@ -143,7 +147,7 @@ float mst0(int numpoints) {
 		point0* p = deletemin0();
 		// printf("newmin %f %f %f %d\n", p->x, p->y, p->dist, p->searched);
 		 
-		// look for new edges and potentially insert them into linked list
+		// look for new edges and potentially insert them into heap
 		while (p->neighbors) {
 			point0* neighbor = points + p->neighbors->vertex;
 			if (neighbor->searched == 0 || neighbor->searched == 1) {
