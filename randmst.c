@@ -1,13 +1,11 @@
 // TODO!!!!!!!!!!!!!!!
-// Run things and actually create the chart
+// Finish up the chart
 // Writeup: procedure, analysis, and discussion
 // Get the makefiles and program to work on remote Linux
-// Exponential backoff, solve analytically for k(numpoints)
 // Test code under valgrind
 // Keep track of potential optimizations (maybe instead of crawling
 // in deletemin0 just iterate thru points for min where searched == 1,
-// remove assert statements before submitting, change the initialization
-// value for (points + i)->dist)
+// change the initialization value for (points + i)->dist)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -111,17 +109,15 @@ float mst0(int numpoints) {
 	while(heap0 != NULL) {
 		vertex* p = deletemin0();
 		// printf("newmin %f %f %f %d\n", p->x, p->y, p->dist, p->searched);
-		 
+		
 		// look for new edges and potentially insert them into heap
 		for(int i = 0; i < numpoints; i++) {
-			if(i != p->num && points[i].searched != 2) {
+			if(i != p->num && (points + i)->searched != 2) {
 				float new_edge = (float) rand() / RAND_MAX;
-				if(new_edge < p->dist)
-					insert0(points[i], new_edge);
+				if(new_edge < (points + i)->dist && new_edge < 1) // change to k(numpoints)
+					insert0((points + i), new_edge);
 			}
-
 		}
-
 	}
 
 	// find the total length of the mst
@@ -133,6 +129,7 @@ float mst0(int numpoints) {
 	free(points);
 	return total;
 }
+
 
 
 // each vertex gets represented by a point
