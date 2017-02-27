@@ -203,7 +203,8 @@ float closer(point* p, point* q, int numpoints, int dim) {
 	else if (dim == 4)
 		new_dist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2) 
 			+ pow((p->z - q->z), 2) + pow((p->w - q->w), 2));
-	if (new_dist >= q->dist || new_dist >= sqrt(dim)) return -1;
+	if (new_dist >= q->dist || new_dist >= sqrt(dim)) // Max Euclidean distance along diagonal
+		return -1;
 	return new_dist;
 }
 
