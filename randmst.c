@@ -1,12 +1,3 @@
-// TODO!!!!!!!!!!!!!!!
-// Finish up the chart
-// Writeup: procedure, analysis, and discussion
-// Get the makefiles and program to work on remote Linux
-// Test code under valgrind
-// Keep track of potential optimizations (maybe instead of crawling
-// in deletemin0 just iterate thru points for min where searched == 1,
-// change the initialization value for (points + i)->dist)
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -15,7 +6,6 @@
 #include <math.h>
 #include <string.h>
 
-
 typedef struct {
 	int num; // number from 1 to n
 	float dist;
@@ -23,7 +13,7 @@ typedef struct {
 	// searched: 0 means not inserted into heap, 1 means inserted not deleted, 2 means deleted
 } vertex;
 
-// heapnodes will live in the linked list heap
+// Heapnodes will live in the linked list heap
 typedef struct heapnode {
 	vertex* p;
 	struct heapnode* prev;
@@ -34,15 +24,15 @@ typedef struct heapnode {
 static heapnode* heap0;
 
 // void insert0(vertex* point, float dist)
-//		insert into the heap (or updates an existing heap node)
+//		Insert into the heap (or updates an existing heap node)
 void insert0(vertex* point, float dist) {
-	// update distance
+	// Update distance
 	point->dist = dist;
 	assert(point->searched != 2);
 	if (point->searched == 1) return;
 	point->searched = 1;
 	
-	// actually insert a new node into the heap
+	// Actually insert a new node into the heap
 	heapnode* n = malloc(sizeof(heapnode));
 	n->p = point;
 	n->prev = NULL;
@@ -67,7 +57,7 @@ vertex* deletemin0() {
 		crawler = crawler->next;
 	}
 
-	// we've found minimum, now extract it from linked list
+	// Found minimum; now extract it from linked list
 	if (minptr->prev) {
 		minptr->prev->next = minptr->next;
 	}
@@ -84,33 +74,28 @@ vertex* deletemin0() {
 	return x;
 }
 
-
-
 // float mst0(int numpoints)
 //		Returns the length of a randomly-generated 0D MST
 float mst0(int numpoints) {	
+	// Initialization of points array
 	vertex* points = (vertex *)malloc(sizeof(vertex) * numpoints);
 	for (int i = 0; i < numpoints; i++) {
 		(points + i)->num = i;
 		(points + i)->dist = 10;
 		(points + i)->searched = 0;
 	}
-	// since we're going to add the first point into the heap
+	// Add the first point into the heap
 	points[0].dist = 0;
     points[0].searched = 1;
-
     heap0 = malloc(sizeof(heapnode));
-    // first thing in the heap will be the first point
 	heap0->p = points;
 	heap0->prev = NULL;
 	heap0->next = NULL;
 
-	// prim's algorithm
+	// Prim's algorithm
 	while(heap0 != NULL) {
 		vertex* p = deletemin0();
-		// printf("newmin %f %f %f %d\n", p->x, p->y, p->dist, p->searched);
-		
-		// look for new edges and potentially insert them into heap
+		// Look for new edges and potentially insert them into heap
 		for(int i = 0; i < numpoints; i++) {
 			if(i != p->num && (points + i)->searched != 2) {
 				float new_edge = (float) rand() / RAND_MAX;
@@ -119,8 +104,7 @@ float mst0(int numpoints) {
 			}
 		}
 	}
-
-	// find the total length of the mst
+	// Find the total length of the MST
 	float total = 0;
 	for (int i = 0; i < numpoints; i++) {
 		assert((points + i)->searched == 2);
@@ -129,10 +113,11 @@ float mst0(int numpoints) {
 	free(points);
 	return total;
 }
+////////////////////////
+// 2, 3, 4-D Case    //
+///////////////////////
 
-
-
-// each vertex gets represented by a point
+// Each vertex gets represented by a point
 typedef struct {
 	float x;
 	float y;
@@ -143,7 +128,7 @@ typedef struct {
 	// searched: 0 means not inserted into heap, 1 means inserted not deleted, 2 means deleted
 } point;
 
-// nodes will live in the linked list heap
+// Nodes will live in the linked list heap
 typedef struct node {
 	point* p;
 	struct node* prev;
@@ -154,15 +139,15 @@ typedef struct node {
 static node* heap;
 
 // void insert(point* point, float dist)
-//		inserts into the heap (or updates an existing heap node)
+//		Inserts into the heap (or updates an existing heap node)
 void insert(point* point, float dist) {
-	// update distance
+	// Update distance
 	point->dist = dist;
 	assert(point->searched != 2);
 	if (point->searched == 1) return;
 	point->searched = 1;
 	
-	// actually insert a new node into the heap
+	// Actually insert a new node into the heap
 	node* n = malloc(sizeof(node));
 	n->p = point;
 	n->prev = NULL;
@@ -188,7 +173,7 @@ point* deletemin() {
 		crawler = crawler->next;
 	}
 
-	// we've found minimum, now extract it from linked list
+	// Found minimum; now extract it from linked list
 	if (minptr->prev) {
 		minptr->prev->next = minptr->next;
 	}
@@ -209,19 +194,18 @@ point* deletemin() {
 //		Returns a new distance if the distance between p and q is less than
 //		q's original "distance" and less than k(numpoints), -1 otherwise
 float closer(point* p, point* q, int numpoints, int dim) {
-	float newdist = 1;
+	float new_dist = 10;
 	if(dim == 2)
-		newdist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2));
+		new_dist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2));
 	else if (dim == 3)
-		newdist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2) 
+		new_dist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2) 
 			+ pow((p->z - q->z), 2));
 	else if (dim == 4)
-		newdist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2) 
+		new_dist = sqrt(pow((p->x - q->x), 2) + pow((p->y - q->y), 2) 
 			+ pow((p->z - q->z), 2) + pow((p->w - q->w), 2));
-	if (newdist >= q->dist || newdist >= 1) return -1; // replace the 1 with k(numpoints)
-	return newdist;
+	if (new_dist >= q->dist || new_dist >= sqrt(dim)) return -1;
+	return new_dist;
 }
-
 
 // float mst(int numpoints, int dim)
 //		Returns the length of a randomly-generated 2D MST
@@ -235,29 +219,18 @@ float mst(int numpoints, int dim) {
 		(points + i)->dist = 10;
 		(points + i)->searched = 0;
 	}
-	// since we're going to add the first point into the heap
+	// Add the first point into the heap
     points[0].dist = 0;
     points[0].searched = 1;
-    
-    // To see all points
-    // for (int i = 0; i < numpoints; i++) {
-    //     printf("(%f, %f, %f, %f) dist:%f searched:%d\n", (points+i)->x, (points+i)->y, 
-    //     	(points+i)->z, (points+i)->w, (points+i)->dist, (points+i)->searched);
-    // } 
-    
     heap = malloc(sizeof(node));
-    // first thing in the heap will be the first point
 	heap->p = points;
 	heap->prev = NULL;
 	heap->next = NULL;
 
-	// prim's algorithm
+	// Prim's algorithm
 	while(heap != NULL) {
 		point* p = deletemin();
-		// printf("newmin (%f, %f, %f, %f) %f %d\n", 
-		// 	p->x, p->y, p->z, p->w, p->dist, p->searched);
-
-		// look for new edges and potentially insert them into linked list
+		// Look for new edges and potentially insert them into linked list
 		for (int i = 0; i < numpoints; i++) {
 			if ((points + i)->searched == 0 || (points + i)->searched == 1) {
 				float length = closer(p, points + i, numpoints, dim);
@@ -268,8 +241,7 @@ float mst(int numpoints, int dim) {
 			}
 		}
 	}
-
-	// find the total length of the mst
+	// Find the total length of the MST
 	float total = 0;
 	for (int i = 0; i < numpoints; i++) {
 		assert((points + i)->searched == 2);
@@ -290,7 +262,7 @@ int main(int argc, char** argv) {
 	int dimensions = atoi(argv[4]);
 
 	time_t t;
-  	srand((unsigned) time(&t));
+  	srand((unsigned) time(&t)); // Set seed for rand
 
 	float cumul = 0;
 	for (int i = 0; i < numtrials; i++) {
@@ -308,7 +280,7 @@ int main(int argc, char** argv) {
    			return 1;
 		}
 	}
-	float ans = cumul / ((float) numtrials);
+	float ans = cumul / ((float) numtrials); // Average trials
 
 	printf("%2f %d %d %d\n", ans, numpoints, numtrials, dimensions);
 	return 0;
