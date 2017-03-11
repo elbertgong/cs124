@@ -1,5 +1,7 @@
 // https://cs61.seas.harvard.edu/wiki/2016/caching-matrix has faster matmul libraries
+// are we allowed to use all this cs61 stuff?
 
+#define _GNU_SOURCE // for readline
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -11,6 +13,7 @@
 #include <inttypes.h>
 #include <getopt.h>
 #include <sys/time.h>
+#include <sys/types.h>
 
 // crossover point
 int n0 = 0;
@@ -32,7 +35,7 @@ static inline double* me(double* m, size_t sz, size_t i, size_t j) {
 //    `a`, `b`, and `c` are square matrices with dimension `sz`.
 //    Computes the matrix product `a x b` and stores it in `c`.
 void strassen(double* c, size_t sz, double* a, double* b) {
-	// TODO: actually implement
+	// TODO: actually implement this :D
     regular(c, sz, a, b);
 }
 
@@ -60,6 +63,9 @@ int main(int argc, char** argv) {
 	int flag = atoi(argv[1]);
 	size_t dim = atoi(argv[2]);
 	char* inputfile = argv[3];
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
     FILE* inptr = fopen(inputfile, "r");
     if (inptr == NULL)
     {
@@ -72,10 +78,15 @@ int main(int argc, char** argv) {
     double* b = (double*) malloc(sizeof(double) * dim * dim);
     double* c = (double*) malloc(sizeof(double) * dim * dim);
 
-    // TODO: somehow read all lines of file inputfile into a, b
+    // read all lines of inputfile into a, b
+    // currently am not checking validity of input
     for (size_t i = 0; i < dim; i++) {
     	for (size_t j = 0; j < dim; j++) {
-    		ch = getc(inptr); // fread(&bf, sizeof(BITMAPFILEHEADER), 1, inptr);
+    		if (getline(&line, &len, inptr) == -1) {
+    			printf("read error\n");
+    			return 1;
+    		}
+    		*me(c, dim, i, j) = atoi(line);
     	}
     }
     fclose(inptr);
