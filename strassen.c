@@ -1,7 +1,8 @@
-// https://cs61.seas.harvard.edu/wiki/2016/caching-matrix has faster matmul libraries
-// are we allowed to use all this cs61 stuff?
+/* https://cs61.seas.harvard.edu/wiki/2016/caching-matrix has faster matmul libraries
+most of this is based on cs61
+are we allowed to use all this cs61 stuff? */
 
-#define _GNU_SOURCE // for readline
+#define _GNU_SOURCE // for readline fn
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -18,41 +19,48 @@
 // crossover point
 int n0 = 0;
 
-double* a;
-double* b;
+int* a;
+int* b;
 
-// TODO: am I using size_t or int? Be consistent
-// me(m, sz, i, j)
+// printmat(m, dim)
+//    Print out a matrix for debugging
+void printmat(int* m, int dim) {
+	for (int i = 0; i < dim * dim; i++) {
+		printf("%d ", *(m + i));
+	}
+	printf("\n");
+}
+
+// me(m, dim, i, j)
 //    Return a pointer to matrix element `m[i][j]` -- the element
 //    at row `i` and column `j`. The matrix is square with dimension
-//    `sz`. Requires: `i < sz && j < sz`
-static inline double* me(double* m, size_t sz, size_t i, size_t j) {
-    return &m[i * sz + j];
+//    `dim`. Requires: `i < dim && j < dim`
+static inline int* me(int* m, int dim, int i, int j) {
+    return &m[i * dim + j];
 }
 
-
-// strassen(c, sz, a, b)
-//    `a`, `b`, and `c` are square matrices with dimension `sz`.
+// regular(c, dim, a, b)
+//    `a`, `b`, and `c` are square matrices with dimension `dim`.
 //    Computes the matrix product `a x b` and stores it in `c`.
-void strassen(double* c, size_t sz, double* a, double* b) {
-	// TODO: actually implement this :D
-    regular(c, sz, a, b);
-}
-
-// regular(c, sz, a, b)
-//    `a`, `b`, and `c` are square matrices with dimension `sz`.
-//    Computes the matrix product `a x b` and stores it in `c`.
-void regular(double* c, size_t sz, double* a, double* b) {
+void regular(int* c, int dim, int* a, int* b) {
     // clear `c`- get rid of this?
-    for (size_t i = 0; i < sz; ++i)
-        for (size_t j = 0; j < sz; ++j)
-            *me(c, sz, i, j) = 0;
+    for (int i = 0; i < dim; ++i)
+        for (int j = 0; j < dim; ++j)
+            *me(c, dim, i, j) = 0;
 
     // compute product and update `c`
-    for (size_t i = 0; i < sz; ++i)
-        for (size_t j = 0; j < sz; ++j)
-            for (size_t k = 0; k < sz; ++k)
-                *me(c, sz, i, j) += *me(a, sz, i, k) * *me(b, sz, k, j);
+    for (int i = 0; i < dim; ++i)
+        for (int j = 0; j < dim; ++j)
+            for (int k = 0; k < dim; ++k)
+                *me(c, dim, i, j) += *me(a, dim, i, k) * *me(b, dim, k, j);
+}
+
+// strassen(c, dim, a, b)
+//    `a`, `b`, and `c` are square matrices with dimension `dim`.
+//    Computes the matrix product `a x b` and stores it in `c`.
+void strassen(int* c, int dim, int* a, int* b) {
+	// TODO: actually implement this :D
+    regular(c, dim, a, b);
 }
 
 int main(int argc, char** argv) {
@@ -61,11 +69,10 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	int flag = atoi(argv[1]);
-	size_t dim = atoi(argv[2]);
+	int dim = atoi(argv[2]);
 	char* inputfile = argv[3];
 	char *line = NULL;
 	size_t len = 0;
-	ssize_t read;
     FILE* inptr = fopen(inputfile, "r");
     if (inptr == NULL)
     {
@@ -74,19 +81,28 @@ int main(int argc, char** argv) {
     }
 
     // allocate matrices
-    double* a = (double*) malloc(sizeof(double) * dim * dim);
-    double* b = (double*) malloc(sizeof(double) * dim * dim);
-    double* c = (double*) malloc(sizeof(double) * dim * dim);
+    int* a = (int*) malloc(sizeof(int) * dim * dim);
+    int* b = (int*) malloc(sizeof(int) * dim * dim);
+    int* c = (int*) malloc(sizeof(int) * dim * dim);
 
     // read all lines of inputfile into a, b
     // currently am not checking validity of input
-    for (size_t i = 0; i < dim; i++) {
-    	for (size_t j = 0; j < dim; j++) {
+    for (int i = 0; i < dim; i++) {
+    	for (int j = 0; j < dim; j++) {
     		if (getline(&line, &len, inptr) == -1) {
     			printf("read error\n");
     			return 1;
     		}
-    		*me(c, dim, i, j) = atoi(line);
+    		*me(a, dim, i, j) = atoi(line);
+    	}
+    }
+    for (int i = 0; i < dim; i++) {
+    	for (int j = 0; j < dim; j++) {
+    		if (getline(&line, &len, inptr) == -1) {
+    			printf("read error\n");
+    			return 1;
+    		}
+    		*me(b, dim, i, j) = atoi(line);
     	}
     }
     fclose(inptr);
@@ -95,10 +111,10 @@ int main(int argc, char** argv) {
     gettimeofday(&time0, NULL);
     strassen(c, dim, a, b);
     gettimeofday(&time1, NULL);
-    
+
     // print along the diagonal
-    for (size_t i = 0; i < dim; ++i)
-        printf("%f\n", *me(c, dim, i, i));
+    for (int i = 0; i < dim; ++i)
+        printf("%d\n", *me(c, dim, i, i));
     
     // compute times, print times and ratio
     if (flag == 1) {
@@ -109,5 +125,6 @@ int main(int argc, char** argv) {
     free(a);
     free(b);
     free(c);
+
   	return 0;
 }
