@@ -4,6 +4,7 @@ OH Questions:
 are we allowed to use all this cs61 stuff? 
 Which size matrix are we gonna use for testing the crossover pt?
 What they're asking for implies a pretty set crossover pt?
+Do we take into account 0+0, 0*0 in theoretical analysis?
 Must we have o many (17) allocations per iteration?
 should initial malloc of c and components(fh, p1, etc) be callocs?
 TODO:
