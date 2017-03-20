@@ -238,12 +238,12 @@ int main(int argc, char** argv) {
     char *line = NULL;
     size_t len = 0;
     FILE* inptr = fopen(inputfile, "r");
+
     if (inptr == NULL)
     {
         printf("Could not open %s\n", inputfile);
         return 2;
-    }
-
+    } 
     // allocate matrices
     int* a = (int*) malloc(sizeof(int) * dim * dim);
     int* b = (int*) malloc(sizeof(int) * dim * dim);
