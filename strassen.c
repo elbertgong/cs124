@@ -7,10 +7,12 @@ Which size matrix are we gonna use for testing the crossover pt?
 What they're asking for implies a pretty set crossover pt?
 Must we have o many (17) allocations per iteration?
 TODO:
+Describe procedure.
 Write a script to generate a random n-dimensional matrix.
 Implement mmap?
 Test analytically for crossover point.
-Create graphs of analytical thing.
+Create graphs and writeup of analytical thing.
+Make makefile work.
 */
 
 #define _GNU_SOURCE // for readline fn
