@@ -9,7 +9,6 @@ Must we have o many (17) allocations per iteration?
 should initial malloc of c and components(fh, p1, etc) be callocs?
 TODO:
 Describe procedure.
-Implement mmap?
 Test analytically for crossover point.
 Create graphs and writeup of analytical thing.
 */
@@ -17,16 +16,9 @@ Create graphs and writeup of analytical thing.
 #define _GNU_SOURCE // for readline fn
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <time.h>
 #include <assert.h>
-#include <float.h>
 #include <math.h>
-#include <string.h>
-#include <inttypes.h>
-#include <getopt.h>
 #include <sys/time.h>
-#include <sys/types.h>
 
 // crossover point
 int n0 = 1;
@@ -245,13 +237,12 @@ int main(int argc, char** argv) {
     char* inputfile = argv[3];
     char *line = NULL;
     size_t len = 0;
-    /* FILE* inptr = fopen(inputfile, "r");
+    FILE* inptr = fopen(inputfile, "r");
     if (inptr == NULL)
     {
         printf("Could not open %s\n", inputfile);
         return 2;
-    } */
-
+    }
 
     // allocate matrices
     int* a = (int*) malloc(sizeof(int) * dim * dim);
@@ -291,7 +282,6 @@ int main(int argc, char** argv) {
     int newdim = (int) roundup;
     for (int i = 0; i < dim; ++i)
         printf("%d\n", *me(c_addr, newdim, i, i));
-    
     
     // compute times, print times and ratio
     if (flag == 1) {
