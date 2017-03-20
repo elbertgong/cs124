@@ -1,8 +1,18 @@
 /* https://cs61.seas.harvard.edu/wiki/2016/caching-matrix has faster matmul libraries
 most of this is based on cs61
-are we allowed to use all this cs61 stuff? 
-can i pad without reallocing?
 should initial malloc of c and allocs of p1...p7 be callocs?
+OH Questions:
+are we allowed to use all this cs61 stuff? 
+Which size matrix are we gonna use for testing the crossover pt?
+What they're asking for implies a pretty set crossover pt?
+Must we have o many (17) allocations per iteration?
+TODO:
+Describe procedure.
+Write a script to generate a random n-dimensional matrix.
+Implement mmap?
+Test analytically for crossover point.
+Create graphs and writeup of analytical thing.
+Make makefile work.
 */
 
 #define _GNU_SOURCE // for readline fn
@@ -236,12 +246,13 @@ int main(int argc, char** argv) {
     char* inputfile = argv[3];
     char *line = NULL;
     size_t len = 0;
-    FILE* inptr = fopen(inputfile, "r");
+    /* FILE* inptr = fopen(inputfile, "r");
     if (inptr == NULL)
     {
         printf("Could not open %s\n", inputfile);
         return 2;
-    }
+    } */
+
 
     // allocate matrices
     int* a = (int*) malloc(sizeof(int) * dim * dim);
