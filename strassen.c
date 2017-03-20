@@ -2,7 +2,7 @@
 most of this is based on cs61
 OH Questions:
 are we allowed to use all this cs61 stuff?
-Must we have o many (17) allocations per iteration?
+Must we have so many (17) allocations per iteration?
 Which size matrix are we gonna use for testing the crossover pt?
 What they're asking for implies a pretty set crossover pt?
 Do we take into account 0+0, 0*0 in theoretical analysis?
