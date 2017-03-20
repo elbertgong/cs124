@@ -23,8 +23,6 @@ Create graphs and writeup of analytical thing.
 // crossover point
 int n0 = 1;
 
-int* a;
-int* b;
 int* c_addr;
 
 // printmat(m, dim)
