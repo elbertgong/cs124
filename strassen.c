@@ -1,18 +1,16 @@
 /* https://cs61.seas.harvard.edu/wiki/2016/caching-matrix has faster matmul libraries
 most of this is based on cs61
-should initial malloc of c and allocs of p1...p7 be callocs?
 OH Questions:
 are we allowed to use all this cs61 stuff? 
 Which size matrix are we gonna use for testing the crossover pt?
 What they're asking for implies a pretty set crossover pt?
 Must we have o many (17) allocations per iteration?
+should initial malloc of c and components(fh, p1, etc) be callocs?
 TODO:
 Describe procedure.
-Write a script to generate a random n-dimensional matrix.
 Implement mmap?
 Test analytically for crossover point.
 Create graphs and writeup of analytical thing.
-Make makefile work.
 */
 
 #define _GNU_SOURCE // for readline fn
