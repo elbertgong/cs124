@@ -39,8 +39,8 @@ void regular(int* c, int dim, int* a, int* b) {
 
     // compute product and update `c`
     for (int i = 0; i < dim; ++i)
-        for (int j = 0; j < dim; ++j)
-            for (int k = 0; k < dim; ++k)
+        for (int k = 0; k < dim; ++k)
+            for (int j = 0; j < dim; ++j)
                 *me(c, dim, i, j) += *me(a, dim, i, k) * *me(b, dim, k, j);
 }
 
