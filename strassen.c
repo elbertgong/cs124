@@ -105,8 +105,9 @@ void strassen(int* c, int dim, int* a, int* b) {
     }
     
     // we shouldn't do this more than once
-    double roundup = pow(2, ceil(log(dim)/log(2.0)));
-    int newdim = (int) roundup;
+    // double roundup = pow(2, ceil(log(dim)/log(2.0)));
+    // int newdim = (int) roundup;
+    int newdim = (dim % 2) ? dim + 1 : dim;
     if (dim != newdim) {
         a = padzeros(a, dim, newdim - dim);
         b = padzeros(b, dim, newdim - dim);
