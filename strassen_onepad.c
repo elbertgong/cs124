@@ -12,6 +12,9 @@ Create graphs and writeup of analytical thing.
 #include <math.h>
 #include <sys/time.h>
 
+// crossover point
+int n0 = 32;
+int pad_0 = 64;
 int* c_addr;
 
 // printmat(m, dim)
@@ -42,21 +45,9 @@ void regular(int* c, int dim, int* a, int* b) {
 
     // compute product and update `c`
     for (int i = 0; i < dim; ++i)
-        for (int k = 0; k < dim; ++k)
-            for (int j = 0; j < dim; ++j)
+        for (int j = 0; j < dim; ++j)
+            for (int k = 0; k < dim; ++k)
                 *me(c, dim, i, j) += *me(a, dim, i, k) * *me(b, dim, k, j);
-}
-
-// padzeros(m, num)
-//    Pads 'num' rows and 'num' columns of zeros onto matrix 'm' with dimension 'dim'
-int* padzeros(int* m, int dim, int num) {
-    int* mtemp = (int*) calloc((dim + num) * (dim + num), sizeof(int));
-    for (int i = 0; i < dim; i++) {
-        for (int j = 0; j < dim; j++) {
-            *me(mtemp, dim + num, i, j) = *me(m, dim, i, j);
-        }
-    }
-    return mtemp;
 }
 
 // add(a, ax, ay, b, bx, by, c, cx, cy, dim)
@@ -84,60 +75,49 @@ void sub(int* a, int ax, int ay, int* b, int bx, int by, int* c, int cx, int cy,
     }
 }
 
-// strassen(c, dim, a, b, n0)
+// strassen(c, dim, a, b)
 //    `a`, `b`, and `c` are square matrices with dimension `dim`.
 //    Computes the matrix product `a x b` and stores it in `c`.
-//    n0 is the input crossover point for testing
 void strassen(int* c, int dim, int* a, int* b, int n0) {
     if (dim <= n0) {
         regular(c, dim, a, b);
         return;
     }
-    
-    // we shouldn't do this more than once
-    double roundup = pow(2, ceil(log(dim)/log(2.0)));
-    int newdim = (int) roundup;
-    if (dim != newdim) {
-        a = padzeros(a, dim, newdim - dim);
-        b = padzeros(b, dim, newdim - dim);
-        c = padzeros(c, dim, newdim - dim);
-        c_addr = c;
-    }
 
-    int x = newdim / 2;
+    int x = dim / 2;
     int* atemp = (int*) malloc(sizeof(int) * x * x);
     int* htemp = (int*) malloc(sizeof(int) * x * x);
     int* etemp = (int*) malloc(sizeof(int) * x * x);
     int* dtemp = (int*) malloc(sizeof(int) * x * x);
     for (int i = 0; i < x; i++) {
         for (int j = 0; j < x; j++) {
-            *me(atemp, x, i, j) = *me(a, newdim, i, j);
-            *me(htemp, x, i, j) = *me(b, newdim, i+x, j+x);
-            *me(etemp, x, i, j) = *me(b, newdim, i, j);
-            *me(dtemp, x, i, j) = *me(a, newdim, i+x, j+x);
+            *me(atemp, x, i, j) = *me(a, dim, i, j);
+            *me(htemp, x, i, j) = *me(b, dim, i+x, j+x);
+            *me(etemp, x, i, j) = *me(b, dim, i, j);
+            *me(dtemp, x, i, j) = *me(a, dim, i+x, j+x);
         }
     }
 
     int* fh = (int*) malloc(sizeof(int) * x * x);
-    sub(b, 0, x, b, x, x, fh, 0, 0, newdim, newdim, x);
+    sub(b, 0, x, b, x, x, fh, 0, 0, dim, dim, x);
     int* ab = (int*) malloc(sizeof(int) * x * x);
-    add(a, 0, 0, a, 0, x, ab, 0, 0, newdim, newdim, x);
+    add(a, 0, 0, a, 0, x, ab, 0, 0, dim, dim, x);
     int* cd = (int*) malloc(sizeof(int) * x * x);
-    add(a, x, 0, a, x, x, cd, 0, 0, newdim, newdim, x);
+    add(a, x, 0, a, x, x, cd, 0, 0, dim, dim, x);
     int* ge = (int*) malloc(sizeof(int) * x * x);
-    sub(b, x, 0, b, 0, 0, ge, 0, 0, newdim, newdim, x);
+    sub(b, x, 0, b, 0, 0, ge, 0, 0, dim, dim, x);
     int* ad = (int*) malloc(sizeof(int) * x * x);
-    add(a, 0, 0, a, x, x, ad, 0, 0, newdim, newdim, x);
+    add(a, 0, 0, a, x, x, ad, 0, 0, dim, dim, x);
     int* eh = (int*) malloc(sizeof(int) * x * x);
-    add(b, 0, 0, b, x, x, eh, 0, 0, newdim, newdim, x);
+    add(b, 0, 0, b, x, x, eh, 0, 0, dim, dim, x);
     int* bd = (int*) malloc(sizeof(int) * x * x);
-    sub(a, 0, x, a, x, x, bd, 0, 0, newdim, newdim, x);
+    sub(a, 0, x, a, x, x, bd, 0, 0, dim, dim, x);
     int* gh = (int*) malloc(sizeof(int) * x * x);
-    add(b, x, 0, b, x, x, gh, 0, 0, newdim, newdim, x);
+    add(b, x, 0, b, x, x, gh, 0, 0, dim, dim, x);
     int* ac = (int*) malloc(sizeof(int) * x * x);
-    sub(a, 0, 0, a, x, 0, ac, 0, 0, newdim, newdim, x);
+    sub(a, 0, 0, a, x, 0, ac, 0, 0, dim, dim, x);
     int* ef = (int*) malloc(sizeof(int) * x * x);
-    add(b, 0, 0, b, 0, x, ef, 0, 0, newdim, newdim, x);
+    add(b, 0, 0, b, 0, x, ef, 0, 0, dim, dim, x);
     
     /* printf("intermediary steps below\n");
     printmat(atemp, x);
@@ -179,17 +159,17 @@ void strassen(int* c, int dim, int* a, int* b, int n0) {
     printmat(p6, x);
     printmat(p7, x); */
     
-    add(p4, 0, 0, p5, 0, 0, c, 0, 0, x, x, newdim);
-    sub(c, 0, 0, p2, 0, 0, c, 0, 0, newdim, x, newdim);
-    add(c, 0, 0, p6, 0, 0, c, 0, 0, newdim, x, newdim);
+    add(p4, 0, 0, p5, 0, 0, c, 0, 0, x, x, dim);
+    sub(c, 0, 0, p2, 0, 0, c, 0, 0, dim, x, dim);
+    add(c, 0, 0, p6, 0, 0, c, 0, 0, dim, x, dim);
 
-    add(p1, 0, 0, p2, 0, 0, c, 0, x, x, x, newdim);
+    add(p1, 0, 0, p2, 0, 0, c, 0, x, x, x, dim);
     
-    add(p3, 0, 0, p4, 0, 0, c, x, 0, x, x, newdim);
+    add(p3, 0, 0, p4, 0, 0, c, x, 0, x, x, dim);
     
-    add(p1, 0, 0, p5, 0, 0, c, x, x, x, x, newdim);
-    sub(c, x, x, p3, 0, 0, c, x, x, newdim, x, newdim);
-    sub(c, x, x, p7, 0, 0, c, x, x, newdim, x, newdim);
+    add(p1, 0, 0, p5, 0, 0, c, x, x, x, x, dim);
+    sub(c, x, x, p3, 0, 0, c, x, x, dim, x, dim);
+    sub(c, x, x, p7, 0, 0, c, x, x, dim, x, dim);
     
     free(atemp);
     free(htemp);
@@ -231,13 +211,16 @@ int main(int argc, char** argv) {
     {
         printf("Could not open %s\n", inputfile);
         return 2;
-    } 
+    }
     // allocate matrices
-    int* a = (int*) malloc(sizeof(int) * dim * dim);
-    int* b = (int*) malloc(sizeof(int) * dim * dim);
-    int* c = (int*) malloc(sizeof(int) * dim * dim);
+    // double roundup = pow(2, ceil(log(dim)/log(2.0)));
+    // int newdim = (int) roundup;
+    int newdim = (dim % pad_0) ? dim + (pad_0 - (dim % pad_0)) : dim;
+    int* a = (int*) calloc(newdim * newdim, sizeof(int));
+    int* b = (int*) calloc(newdim * newdim, sizeof(int));
+    int* c = (int*) calloc(newdim * newdim, sizeof(int));
     c_addr = c;
-        
+
     // read all lines of inputfile into a, b
     // currently am not checking validity of input
     for (int i = 0; i < dim; i++) {
@@ -268,10 +251,12 @@ int main(int argc, char** argv) {
         gettimeofday(&time1, NULL);
         
         // // print along the diagonal
-        // double roundup = pow(2, ceil(log(dim)/log(2.0)));
-        // int newdim = (int) roundup;
-        // for (int i = 0; i < dim; ++i)
-        //     printf("%d, ", *me(c_addr, newdim, i, i));
+        if(flag == 0) {
+            double roundup = pow(2, ceil(log(dim)/log(2.0)));
+            int newdim = (int) roundup;
+            for (int i = 0; i < dim; ++i)
+                printf("%d, ", *me(c_addr, newdim, i, i));
+        }
         
         // compute times, print times and ratio
         if (flag == 1) {
