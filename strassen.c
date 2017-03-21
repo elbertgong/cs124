@@ -21,7 +21,7 @@ Create graphs and writeup of analytical thing.
 #include <sys/time.h>
 
 // crossover point
-int n0 = 1;
+// int n0;
 
 int* c_addr;
 
@@ -53,8 +53,8 @@ void regular(int* c, int dim, int* a, int* b) {
 
     // compute product and update `c`
     for (int i = 0; i < dim; ++i)
-        for (int j = 0; j < dim; ++j)
-            for (int k = 0; k < dim; ++k)
+        for (int k = 0; k < dim; ++k)
+            for (int j = 0; j < dim; ++j)
                 *me(c, dim, i, j) += *me(a, dim, i, k) * *me(b, dim, k, j);
 }
 
@@ -95,10 +95,11 @@ void sub(int* a, int ax, int ay, int* b, int bx, int by, int* c, int cx, int cy,
     }
 }
 
-// strassen(c, dim, a, b)
+// strassen(c, dim, a, b, n0)
 //    `a`, `b`, and `c` are square matrices with dimension `dim`.
 //    Computes the matrix product `a x b` and stores it in `c`.
-void strassen(int* c, int dim, int* a, int* b) {
+//    n0 is the input crossover point for testing
+void strassen(int* c, int dim, int* a, int* b, int n0) {
     if (dim <= n0) {
         regular(c, dim, a, b);
         return;
@@ -107,6 +108,7 @@ void strassen(int* c, int dim, int* a, int* b) {
     // we shouldn't do this more than once
     double roundup = pow(2, ceil(log(dim)/log(2.0)));
     int newdim = (int) roundup;
+    // int newdim = (dim % 2) ? dim + 1 : dim;
     if (dim != newdim) {
         a = padzeros(a, dim, newdim - dim);
         b = padzeros(b, dim, newdim - dim);
@@ -166,19 +168,19 @@ void strassen(int* c, int dim, int* a, int* b) {
     printmat(ef, x); */
     
     int* p1 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p1, x, atemp, fh);
+    strassen(p1, x, atemp, fh, n0);
     int* p2 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p2, x, ab, htemp);
+    strassen(p2, x, ab, htemp, n0);
     int* p3 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p3, x, cd, etemp);
+    strassen(p3, x, cd, etemp, n0);
     int* p4 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p4, x, dtemp, ge);
+    strassen(p4, x, dtemp, ge, n0);
     int* p5 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p5, x, ad, eh);
+    strassen(p5, x, ad, eh, n0);
     int* p6 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p6, x, bd, gh);
+    strassen(p6, x, bd, gh, n0);
     int* p7 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p7, x, ac, ef);
+    strassen(p7, x, ac, ef, n0);
     
     /* printf("p intermediary steps below\n");
     printmat(p1, x);
@@ -247,7 +249,7 @@ int main(int argc, char** argv) {
     int* b = (int*) malloc(sizeof(int) * dim * dim);
     int* c = (int*) malloc(sizeof(int) * dim * dim);
     c_addr = c;
-
+        
     // read all lines of inputfile into a, b
     // currently am not checking validity of input
     for (int i = 0; i < dim; i++) {
@@ -270,26 +272,29 @@ int main(int argc, char** argv) {
     }
     fclose(inptr);
 
-    struct timeval time0, time1;
-    gettimeofday(&time0, NULL);
-    strassen(c, dim, a, b);
-    gettimeofday(&time1, NULL);
-    
-    // go along the diagonal
-    double roundup = pow(2, ceil(log(dim)/log(2.0)));
-    int newdim = (int) roundup;
-    for (int i = 0; i < dim; ++i)
-        printf("%d\n", *me(c_addr, newdim, i, i));
-    
-    // compute times, print times and ratio
-    if (flag == 1) {
-        timersub(&time1, &time0, &time1);
-        printf("multiply time %ld.%06lds \n", time1.tv_sec, time1.tv_usec);
+    // test multiple crossover points
+    for(int n0 = 1; n0 <= 64; n0 = n0 * 2) {
+        struct timeval time0, time1;
+        gettimeofday(&time0, NULL);
+        strassen(c, dim, a, b, n0);
+        gettimeofday(&time1, NULL);
+        
+        // // print along the diagonal
+        // double roundup = pow(2, ceil(log(dim)/log(2.0)));
+        // int newdim = (int) roundup;
+        // for (int i = 0; i < dim; ++i)
+        //     printf("%d, ", *me(c_addr, newdim, i, i));
+        
+        // compute times, print times and ratio
+        if (flag == 1) {
+            timersub(&time1, &time0, &time1);
+            printf("Matrix dim: %d and n0: %d\n", dim, n0);
+            printf("multiply time %ld.%06ds \n", time1.tv_sec, time1.tv_usec);
+        }
     }
-    
+
     free(a);
     free(b);
     free(c);
-
     return 0;
 }
