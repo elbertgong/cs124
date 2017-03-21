@@ -1,1 +1,201 @@
- 
+Matrix dim: 128 and n0: 4
+multiply time 0.058326s 
+Matrix dim: 128 and n0: 8
+multiply time 0.039217s 
+Matrix dim: 128 and n0: 16
+multiply time 0.034611s 
+Matrix dim: 128 and n0: 32
+multiply time 0.027545s 
+Matrix dim: 128 and n0: 64
+multiply time 0.028914s 
+Matrix dim: 256 and n0: 4
+multiply time 0.425005s 
+Matrix dim: 256 and n0: 8
+multiply time 0.269246s 
+Matrix dim: 256 and n0: 16
+multiply time 0.232449s 
+Matrix dim: 256 and n0: 32
+multiply time 0.219421s 
+Matrix dim: 256 and n0: 64
+multiply time 0.211338s 
+Matrix dim: 512 and n0: 4
+multiply time 3.315415s 
+Matrix dim: 512 and n0: 8
+multiply time 2.100625s 
+Matrix dim: 512 and n0: 16
+multiply time 1.839045s 
+Matrix dim: 512 and n0: 32
+multiply time 1.668964s 
+Matrix dim: 512 and n0: 64
+multiply time 1.675044s 
+Matrix dim: 1024 and n0: 4
+multiply time 21.325375s 
+Matrix dim: 1024 and n0: 8
+multiply time 13.129061s 
+Matrix dim: 1024 and n0: 16
+multiply time 11.327397s 
+Matrix dim: 1024 and n0: 32
+multiply time 10.605172s 
+Matrix dim: 1024 and n0: 64
+multiply time 10.833159s 
+read error
+Matrix dim: 2048 and n0: 4
+multiply time 153.059950s 
+Matrix dim: 2048 and n0: 8
+multiply time 101.358249s 
+Matrix dim: 2048 and n0: 16
+multiply time 87.542828s 
+Matrix dim: 2048 and n0: 32
+multiply time 77.049855s 
+Matrix dim: 2048 and n0: 64
+multiply time 79.613627s 
+Matrix dim: 127 and n0: 4
+multiply time 0.075970s 
+Matrix dim: 127 and n0: 8
+multiply time 0.040663s 
+Matrix dim: 127 and n0: 16
+multiply time 0.036667s 
+Matrix dim: 127 and n0: 32
+multiply time 0.033205s 
+Matrix dim: 127 and n0: 64
+multiply time 0.033801s 
+Matrix dim: 255 and n0: 4
+multiply time 0.470886s 
+Matrix dim: 255 and n0: 8
+multiply time 0.292527s 
+Matrix dim: 255 and n0: 16
+multiply time 0.245791s 
+Matrix dim: 255 and n0: 32
+multiply time 0.219460s 
+Matrix dim: 255 and n0: 64
+multiply time 0.236628s 
+Matrix dim: 511 and n0: 4
+multiply time 3.335552s 
+Matrix dim: 511 and n0: 8
+multiply time 2.016974s 
+Matrix dim: 511 and n0: 16
+multiply time 1.735685s 
+Matrix dim: 511 and n0: 32
+multiply time 1.625616s 
+Matrix dim: 511 and n0: 64
+multiply time 1.594884s 
+Matrix dim: 1023 and n0: 4
+multiply time 22.395908s 
+Matrix dim: 1023 and n0: 8
+multiply time 14.177105s 
+Matrix dim: 1023 and n0: 16
+multiply time 12.455967s 
+Matrix dim: 1023 and n0: 32
+multiply time 11.625909s 
+Matrix dim: 1023 and n0: 64
+multiply time 11.892884s 
+Matrix dim: 2047 and n0: 4
+multiply time 156.984733s 
+Matrix dim: 2047 and n0: 8
+multiply time 96.252690s 
+Matrix dim: 2047 and n0: 16
+multiply time 85.554619s 
+Matrix dim: 2047 and n0: 32
+multiply time 77.144813s 
+Matrix dim: 2047 and n0: 64
+multiply time 78.163904s 
+Matrix dim: 129 and n0: 4
+multiply time 0.470916s 
+Matrix dim: 129 and n0: 8
+multiply time 0.160718s 
+Matrix dim: 129 and n0: 16
+multiply time 0.083902s 
+Matrix dim: 129 and n0: 32
+multiply time 0.056485s 
+Matrix dim: 129 and n0: 64
+multiply time 0.036107s 
+Matrix dim: 257 and n0: 4
+multiply time 3.103687s 
+Matrix dim: 257 and n0: 8
+multiply time 1.069750s 
+Matrix dim: 257 and n0: 16
+multiply time 0.541560s 
+Matrix dim: 257 and n0: 32
+multiply time 0.352366s 
+Matrix dim: 257 and n0: 64
+multiply time 0.281105s 
+Matrix dim: 513 and n0: 4
+multiply time 21.123632s 
+Matrix dim: 513 and n0: 8
+multiply time 7.584965s 
+Matrix dim: 513 and n0: 16
+multiply time 3.780654s 
+Matrix dim: 513 and n0: 32
+multiply time 2.507456s 
+Matrix dim: 513 and n0: 64
+multiply time 2.005628s 
+Matrix dim: 1025 and n0: 4
+multiply time 1082.495558s 
+Matrix dim: 1025 and n0: 8
+multiply time 59.537838s 
+Matrix dim: 1025 and n0: 16
+multiply time 29.644674s 
+Matrix dim: 1025 and n0: 32
+multiply time 18.908861s 
+Matrix dim: 1025 and n0: 64
+multiply time 14.753756s 
+Matrix dim: 2049 and n0: 4
+multiply time 1112.910382s 
+Matrix dim: 2049 and n0: 8
+multiply time 400.587142s 
+Matrix dim: 2049 and n0: 16
+multiply time 196.708572s 
+Matrix dim: 2049 and n0: 32
+multiply time 128.346202s 
+Matrix dim: 2049 and n0: 64
+multiply time 104.573740s 
+Matrix dim: 96 and n0: 4
+multiply time 0.089224s 
+Matrix dim: 96 and n0: 8
+multiply time 0.030109s 
+Matrix dim: 96 and n0: 16
+multiply time 0.038288s 
+Matrix dim: 96 and n0: 32
+multiply time 0.023694s 
+Matrix dim: 96 and n0: 64
+multiply time 0.016058s 
+Matrix dim: 192 and n0: 4
+multiply time 0.470781s 
+Matrix dim: 192 and n0: 8
+multiply time 0.145358s 
+Matrix dim: 192 and n0: 16
+multiply time 0.117211s 
+Matrix dim: 192 and n0: 32
+multiply time 0.102200s 
+Matrix dim: 192 and n0: 64
+multiply time 0.095939s 
+Matrix dim: 384 and n0: 4
+multiply time 2.966584s 
+Matrix dim: 384 and n0: 8
+multiply time 1.012147s 
+Matrix dim: 384 and n0: 16
+multiply time 0.813779s 
+Matrix dim: 384 and n0: 32
+multiply time 0.713460s 
+Matrix dim: 384 and n0: 64
+multiply time 0.714609s 
+Matrix dim: 768 and n0: 4
+multiply time 20.751702s 
+Matrix dim: 768 and n0: 8
+multiply time 6.976393s 
+Matrix dim: 768 and n0: 16
+multiply time 5.529456s 
+Matrix dim: 768 and n0: 32
+multiply time 4.959315s 
+Matrix dim: 768 and n0: 64
+multiply time 4.931700s 
+Matrix dim: 1536 and n0: 4
+multiply time 150.933527s 
+Matrix dim: 1536 and n0: 8
+multiply time 54.786544s 
+Matrix dim: 1536 and n0: 16
+multiply time 43.863835s 
+Matrix dim: 1536 and n0: 32
+multiply time 36.626952s 
+Matrix dim: 1536 and n0: 64
+multiply time 35.936158s 

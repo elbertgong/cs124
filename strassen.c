@@ -1,10 +1,3 @@
-/* 
-TODO:
-Describe procedure.
-Test analytically for crossover point.
-Create graphs and writeup of analytical thing.
-*/
-
 #define _GNU_SOURCE // for readline fn
 #include <stdio.h>
 #include <stdlib.h>

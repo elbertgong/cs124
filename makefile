@@ -4,9 +4,9 @@ OBJECTS = strassen.o
 OBJECTR = randmst.o
 OBJECTO = strassen_onepad.o
 
-all: strassen strassen_onepad randmst
+all: strassen strassen_onepad strassen_manypad randmst
 
-test_all: test test_onepad
+test_all: test test_onepad test_manypad
 
 test:
 	./strassen 1 128 random.txt >> results1.txt;
@@ -28,7 +28,7 @@ test:
 	./strassen 1 192 random.txt >> results1.txt;
 	./strassen 1 384 random.txt >> results1.txt;
 	./strassen 1 768 random.txt >> results1.txt;
-	./strassen 1 1536 random.txt >> results1.txt;
+	./strassen 1 1536 random.txt >> results1.txt
 
 test_onepad:
 	./strassen_onepad 1 128 random.txt >> results2.txt;
@@ -96,4 +96,4 @@ randmst: $(OBJECTR)
 	$(CC) $(OBJECTR) -o randmst -lm
 
 clean:
-	rm -f *.o strassen randmst
+	rm -f *.o strassen randmst strassen_onepad strassen_manypad
