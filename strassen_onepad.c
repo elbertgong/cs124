@@ -13,7 +13,8 @@ Create graphs and writeup of analytical thing.
 #include <sys/time.h>
 
 // crossover point
-int n0 = 1;
+int n0 = 32;
+int pad_0 = 64;
 
 // printmat(m, dim)
 //    Print out a matrix for debugging
@@ -211,8 +212,9 @@ int main(int argc, char** argv) {
         return 2;
     }
     // allocate matrices
-    double roundup = pow(2, ceil(log(dim)/log(2.0)));
-    int newdim = (int) roundup;
+    // double roundup = pow(2, ceil(log(dim)/log(2.0)));
+    // int newdim = (int) roundup;
+    int newdim = (dim % pad_0) ? dim + (pad_0 - (dim % pad_0)) : dim;
     int* a = (int*) calloc(newdim * newdim, sizeof(int));
     int* b = (int*) calloc(newdim * newdim, sizeof(int));
     int* c = (int*) calloc(newdim * newdim, sizeof(int));
