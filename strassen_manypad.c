@@ -8,7 +8,7 @@
 
 // crossover point
 // pad0 can't be greater than 2n0
-int n0 = 32;
+// int n0 = 32;
 int pad0 = 4;
 
 // printmat(m, dim)
@@ -97,7 +97,7 @@ void sub(int* a, int ax, int ay, int* b, int bx, int by, int* c, int cx, int cy,
 // strassen(c, dim, a, b)
 //    `a`, `b`, and `c` are square matrices with dimension `dim`.
 //    Computes the matrix product `a x b` and stores it in `c`.
-void strassen(int* c, int dim, int* a, int* b) {
+void strassen(int* c, int dim, int* a, int* b, int n0) {
     if (dim <= n0) {
         regular(c, dim, a, b);
         return;
@@ -148,19 +148,19 @@ void strassen(int* c, int dim, int* a, int* b) {
     add(b, 0, 0, b, 0, x, ef, 0, 0, newdim, newdim, x);
     
     int* p1 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p1, x, atemp, fh);
+    strassen(p1, x, atemp, fh, n0);
     int* p2 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p2, x, ab, htemp);
+    strassen(p2, x, ab, htemp, n0);
     int* p3 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p3, x, cd, etemp);
+    strassen(p3, x, cd, etemp, n0);
     int* p4 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p4, x, dtemp, ge);
+    strassen(p4, x, dtemp, ge, n0);
     int* p5 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p5, x, ad, eh);
+    strassen(p5, x, ad, eh, n0);
     int* p6 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p6, x, bd, gh);
+    strassen(p6, x, bd, gh, n0);
     int* p7 = (int*) malloc(sizeof(int) * x * x);
-    strassen(p7, x, ac, ef);
+    strassen(p7, x, ac, ef, n0);
 
     add(p4, 0, 0, p5, 0, 0, c, 0, 0, x, x, newdim);
     sub(c, 0, 0, p2, 0, 0, c, 0, 0, newdim, x, newdim);
@@ -247,20 +247,26 @@ int main(int argc, char** argv) {
         }
     }
     fclose(inptr);
-
-    struct timeval time0, time1;
-    gettimeofday(&time0, NULL);
-    strassen(c, dim, a, b);
-    gettimeofday(&time1, NULL);
     
+    if(flag == 0) {
     // go along the diagonal
-    for (int i = 0; i < dim; ++i)
-        printf("%d\n", *me(c, dim, i, i));
+        for (int i = 0; i < dim; ++i)
+            printf("%d\n", *me(c, dim, i, i));
+    }
     
-    // compute times, print times and ratio
-    if (flag == 1) {
-        timersub(&time1, &time0, &time1);
-        printf("multiply time %ld.%06lds \n", time1.tv_sec, time1.tv_usec);
+    // test multiple crossover points
+    for(int n0 = 4; n0 <= 64; n0 = n0 * 2) {
+        struct timeval time0, time1;
+        gettimeofday(&time0, NULL);
+        strassen(c, dim, a, b, n0);
+        gettimeofday(&time1, NULL);
+        
+        // compute times, print times and ratio
+        if (flag == 1) {
+            timersub(&time1, &time0, &time1);
+            printf("Matrix dim: %d and n0: %d\n", dim, n0);
+            printf("multiply time %ld.%06ds \n", time1.tv_sec, time1.tv_usec);
+        }
     }
     
     free(a);
