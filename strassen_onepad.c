@@ -30,15 +30,15 @@ static inline int* me(int* m, int dim, int i, int j) {
 //    `a`, `b`, and `c` are square matrices with dimension `dim`.
 //    Computes the matrix product `a x b` and stores it in `c`.
 void regular(int* c, int dim, int* a, int* b) {
-    // clear `c`- get rid of this?
+    // clear `c'
     for (int i = 0; i < dim; ++i)
         for (int j = 0; j < dim; ++j)
             *me(c, dim, i, j) = 0;
 
     // compute product and update `c`
     for (int i = 0; i < dim; ++i)
-        for (int j = 0; j < dim; ++j)
-            for (int k = 0; k < dim; ++k)
+        for (int k = 0; k < dim; ++k)
+            for (int j = 0; j < dim; ++j)
                 *me(c, dim, i, j) += *me(a, dim, i, k) * *me(b, dim, k, j);
 }
 
