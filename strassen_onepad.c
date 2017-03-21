@@ -1,10 +1,3 @@
-/* 
-TODO:
-Describe procedure.
-Test analytically for crossover point.
-Create graphs and writeup of analytical thing.
-*/
-
 #define _GNU_SOURCE // for readline fn
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +7,7 @@ Create graphs and writeup of analytical thing.
 
 // crossover point
 int n0 = 32;
-int pad_0 = 64;
+int pad0 = 64;
 
 // printmat(m, dim)
 //    Print out a matrix for debugging
@@ -118,22 +111,6 @@ void strassen(int* c, int dim, int* a, int* b) {
     int* ef = (int*) malloc(sizeof(int) * x * x);
     add(b, 0, 0, b, 0, x, ef, 0, 0, dim, dim, x);
     
-    /* printf("intermediary steps below\n");
-    printmat(atemp, x);
-    printmat(fh, x);
-    printmat(ab, x);
-    printmat(htemp, x);
-    printmat(cd, x);
-    printmat(etemp, x);
-    printmat(dtemp, x);
-    printmat(ge, x);
-    printmat(ad, x);
-    printmat(eh, x);
-    printmat(bd, x);
-    printmat(gh, x);
-    printmat(ac, x);
-    printmat(ef, x); */
-    
     int* p1 = (int*) malloc(sizeof(int) * x * x);
     strassen(p1, x, atemp, fh);
     int* p2 = (int*) malloc(sizeof(int) * x * x);
@@ -148,15 +125,6 @@ void strassen(int* c, int dim, int* a, int* b) {
     strassen(p6, x, bd, gh);
     int* p7 = (int*) malloc(sizeof(int) * x * x);
     strassen(p7, x, ac, ef);
-    
-    /* printf("p intermediary steps below\n");
-    printmat(p1, x);
-    printmat(p2, x);
-    printmat(p3, x);
-    printmat(p4, x);
-    printmat(p5, x);
-    printmat(p6, x);
-    printmat(p7, x); */
     
     add(p4, 0, 0, p5, 0, 0, c, 0, 0, x, x, dim);
     sub(c, 0, 0, p2, 0, 0, c, 0, 0, dim, x, dim);
@@ -212,15 +180,12 @@ int main(int argc, char** argv) {
         return 2;
     }
     // allocate matrices
-    // double roundup = pow(2, ceil(log(dim)/log(2.0)));
-    // int newdim = (int) roundup;
-    int newdim = (dim % pad_0) ? dim + (pad_0 - (dim % pad_0)) : dim;
+    int newdim = (dim % pad0) ? dim + (pad0 - (dim % pad0)) : dim;
     int* a = (int*) calloc(newdim * newdim, sizeof(int));
     int* b = (int*) calloc(newdim * newdim, sizeof(int));
     int* c = (int*) calloc(newdim * newdim, sizeof(int));
 
     // read all lines of inputfile into a, b
-    // currently am not checking validity of input
     for (int i = 0; i < dim; i++) {
         for (int j = 0; j < dim; j++) {
             if (getline(&line, &len, inptr) == -1) {

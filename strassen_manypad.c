@@ -4,11 +4,12 @@
 #include <assert.h>
 #include <math.h>
 #include <sys/time.h>
+#include <string.h>
 
 // crossover point
+// pad0 can't be greater than 2n0
 int n0 = 32;
-
-int* c_addr;
+int pad0 = 4;
 
 // printmat(m, dim)
 //    Print out a matrix for debugging
@@ -43,7 +44,7 @@ void regular(int* c, int dim, int* a, int* b) {
                 *me(c, dim, i, j) += *me(a, dim, i, k) * *me(b, dim, k, j);
 }
 
-// padzeros(m, num)
+// padzeros(m, dim, num)
 //    Pads 'num' rows and 'num' columns of zeros onto matrix 'm' with dimension 'dim'
 int* padzeros(int* m, int dim, int num) {
     int* mtemp = (int*) calloc((dim + num) * (dim + num), sizeof(int));
@@ -52,6 +53,19 @@ int* padzeros(int* m, int dim, int num) {
             *me(mtemp, dim + num, i, j) = *me(m, dim, i, j);
         }
     }
+    return mtemp;
+}
+
+// stripzeros(m, num)
+//    Strips 'num' rows and 'num' columns of zeros onto matrix 'm' with dimension 'dim'
+int* stripzeros(int* m, int dim, int num) {
+    int* mtemp = (int*) calloc((dim - num) * (dim - num), sizeof(int));
+    for (int i = 0; i < dim - num; i++) {
+        for (int j = 0; j < dim - num; j++) {
+            *me(mtemp, dim - num, i, j) = *me(m, dim, i, j);
+        }
+    }
+    free(m);
     return mtemp;
 }
 
@@ -89,17 +103,15 @@ void strassen(int* c, int dim, int* a, int* b) {
         return;
     }
     
+    int* c_addr = c;
     // we shouldn't do this more than once
-    double roundup = pow(2, ceil(log(dim)/log(2.0)));
-    int newdim = (int) roundup;
-    // int newdim = (dim % pad_0) ? dim + (pad_0 - (dim % pad_0)) : dim;
+    int newdim = (dim % pad0) ? dim + (pad0 - (dim % pad0)) : dim;
     if (dim != newdim) {
         a = padzeros(a, dim, newdim - dim);
         b = padzeros(b, dim, newdim - dim);
         c = padzeros(c, dim, newdim - dim);
-        c_addr = c;
     }
-
+    
     int x = newdim / 2;
     int* atemp = (int*) malloc(sizeof(int) * x * x);
     int* htemp = (int*) malloc(sizeof(int) * x * x);
@@ -135,22 +147,6 @@ void strassen(int* c, int dim, int* a, int* b) {
     int* ef = (int*) malloc(sizeof(int) * x * x);
     add(b, 0, 0, b, 0, x, ef, 0, 0, newdim, newdim, x);
     
-    /* printf("intermediary steps below\n");
-    printmat(atemp, x);
-    printmat(fh, x);
-    printmat(ab, x);
-    printmat(htemp, x);
-    printmat(cd, x);
-    printmat(etemp, x);
-    printmat(dtemp, x);
-    printmat(ge, x);
-    printmat(ad, x);
-    printmat(eh, x);
-    printmat(bd, x);
-    printmat(gh, x);
-    printmat(ac, x);
-    printmat(ef, x); */
-    
     int* p1 = (int*) malloc(sizeof(int) * x * x);
     strassen(p1, x, atemp, fh);
     int* p2 = (int*) malloc(sizeof(int) * x * x);
@@ -165,27 +161,24 @@ void strassen(int* c, int dim, int* a, int* b) {
     strassen(p6, x, bd, gh);
     int* p7 = (int*) malloc(sizeof(int) * x * x);
     strassen(p7, x, ac, ef);
-    
-    /* printf("p intermediary steps below\n");
-    printmat(p1, x);
-    printmat(p2, x);
-    printmat(p3, x);
-    printmat(p4, x);
-    printmat(p5, x);
-    printmat(p6, x);
-    printmat(p7, x); */
-    
+
     add(p4, 0, 0, p5, 0, 0, c, 0, 0, x, x, newdim);
     sub(c, 0, 0, p2, 0, 0, c, 0, 0, newdim, x, newdim);
     add(c, 0, 0, p6, 0, 0, c, 0, 0, newdim, x, newdim);
 
     add(p1, 0, 0, p2, 0, 0, c, 0, x, x, x, newdim);
-    
+
     add(p3, 0, 0, p4, 0, 0, c, x, 0, x, x, newdim);
     
     add(p1, 0, 0, p5, 0, 0, c, x, x, x, x, newdim);
     sub(c, x, x, p3, 0, 0, c, x, x, newdim, x, newdim);
     sub(c, x, x, p7, 0, 0, c, x, x, newdim, x, newdim);
+
+    if (dim != newdim) {
+        c = stripzeros(c, newdim, newdim - dim);
+        memcpy((void*) c_addr, (void*) c, sizeof(int) * dim * dim);
+        free(c);
+    }
     
     free(atemp);
     free(htemp);
@@ -232,7 +225,6 @@ int main(int argc, char** argv) {
     int* a = (int*) malloc(sizeof(int) * dim * dim);
     int* b = (int*) malloc(sizeof(int) * dim * dim);
     int* c = (int*) malloc(sizeof(int) * dim * dim);
-    c_addr = c;
 
     // read all lines of inputfile into a, b
     // currently am not checking validity of input
@@ -262,10 +254,8 @@ int main(int argc, char** argv) {
     gettimeofday(&time1, NULL);
     
     // go along the diagonal
-    double roundup = pow(2, ceil(log(dim)/log(2.0)));
-    int newdim = (int) roundup;
     for (int i = 0; i < dim; ++i)
-        printf("%d\n", *me(c_addr, newdim, i, i));
+        printf("%d\n", *me(c, dim, i, i));
     
     // compute times, print times and ratio
     if (flag == 1) {
