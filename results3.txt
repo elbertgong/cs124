@@ -1,201 +1,200 @@
 Matrix dim: 128 and n0: 4
-multiply time 0.058326s 
+0.058326s 
 Matrix dim: 128 and n0: 8
-multiply time 0.039217s 
+0.039217s 
 Matrix dim: 128 and n0: 16
-multiply time 0.034611s 
+0.034611s 
 Matrix dim: 128 and n0: 32
-multiply time 0.027545s 
+0.027545s 
 Matrix dim: 128 and n0: 64
-multiply time 0.028914s 
+0.028914s 
 Matrix dim: 256 and n0: 4
-multiply time 0.425005s 
+0.425005s 
 Matrix dim: 256 and n0: 8
-multiply time 0.269246s 
+0.269246s 
 Matrix dim: 256 and n0: 16
-multiply time 0.232449s 
+0.232449s 
 Matrix dim: 256 and n0: 32
-multiply time 0.219421s 
+0.219421s 
 Matrix dim: 256 and n0: 64
-multiply time 0.211338s 
+0.211338s 
 Matrix dim: 512 and n0: 4
-multiply time 3.315415s 
+3.315415s 
 Matrix dim: 512 and n0: 8
-multiply time 2.100625s 
+2.100625s 
 Matrix dim: 512 and n0: 16
-multiply time 1.839045s 
+1.839045s 
 Matrix dim: 512 and n0: 32
-multiply time 1.668964s 
+1.668964s 
 Matrix dim: 512 and n0: 64
-multiply time 1.675044s 
+1.675044s 
 Matrix dim: 1024 and n0: 4
-multiply time 21.325375s 
+21.325375s 
 Matrix dim: 1024 and n0: 8
-multiply time 13.129061s 
+13.129061s 
 Matrix dim: 1024 and n0: 16
-multiply time 11.327397s 
+11.327397s 
 Matrix dim: 1024 and n0: 32
-multiply time 10.605172s 
+10.605172s 
 Matrix dim: 1024 and n0: 64
-multiply time 10.833159s 
-read error
+10.833159s 
 Matrix dim: 2048 and n0: 4
-multiply time 153.059950s 
+153.059950s 
 Matrix dim: 2048 and n0: 8
-multiply time 101.358249s 
+101.358249s 
 Matrix dim: 2048 and n0: 16
-multiply time 87.542828s 
+87.542828s 
 Matrix dim: 2048 and n0: 32
-multiply time 77.049855s 
+77.049855s 
 Matrix dim: 2048 and n0: 64
-multiply time 79.613627s 
+79.613627s 
 Matrix dim: 127 and n0: 4
-multiply time 0.075970s 
+0.075970s 
 Matrix dim: 127 and n0: 8
-multiply time 0.040663s 
+0.040663s 
 Matrix dim: 127 and n0: 16
-multiply time 0.036667s 
+0.036667s 
 Matrix dim: 127 and n0: 32
-multiply time 0.033205s 
+0.033205s 
 Matrix dim: 127 and n0: 64
-multiply time 0.033801s 
+0.033801s 
 Matrix dim: 255 and n0: 4
-multiply time 0.470886s 
+0.470886s 
 Matrix dim: 255 and n0: 8
-multiply time 0.292527s 
+0.292527s 
 Matrix dim: 255 and n0: 16
-multiply time 0.245791s 
+0.245791s 
 Matrix dim: 255 and n0: 32
-multiply time 0.219460s 
+0.219460s 
 Matrix dim: 255 and n0: 64
-multiply time 0.236628s 
+0.236628s 
 Matrix dim: 511 and n0: 4
-multiply time 3.335552s 
+3.335552s 
 Matrix dim: 511 and n0: 8
-multiply time 2.016974s 
+2.016974s 
 Matrix dim: 511 and n0: 16
-multiply time 1.735685s 
+1.735685s 
 Matrix dim: 511 and n0: 32
-multiply time 1.625616s 
+1.625616s 
 Matrix dim: 511 and n0: 64
-multiply time 1.594884s 
+1.594884s 
 Matrix dim: 1023 and n0: 4
-multiply time 22.395908s 
+22.395908s 
 Matrix dim: 1023 and n0: 8
-multiply time 14.177105s 
+14.177105s 
 Matrix dim: 1023 and n0: 16
-multiply time 12.455967s 
+12.455967s 
 Matrix dim: 1023 and n0: 32
-multiply time 11.625909s 
+11.625909s 
 Matrix dim: 1023 and n0: 64
-multiply time 11.892884s 
+11.892884s 
 Matrix dim: 2047 and n0: 4
-multiply time 156.984733s 
+156.984733s 
 Matrix dim: 2047 and n0: 8
-multiply time 96.252690s 
+96.252690s 
 Matrix dim: 2047 and n0: 16
-multiply time 85.554619s 
+85.554619s 
 Matrix dim: 2047 and n0: 32
-multiply time 77.144813s 
+77.144813s 
 Matrix dim: 2047 and n0: 64
-multiply time 78.163904s 
+78.163904s 
 Matrix dim: 129 and n0: 4
-multiply time 0.470916s 
+0.470916s 
 Matrix dim: 129 and n0: 8
-multiply time 0.160718s 
+0.160718s 
 Matrix dim: 129 and n0: 16
-multiply time 0.083902s 
+0.083902s 
 Matrix dim: 129 and n0: 32
-multiply time 0.056485s 
+0.056485s 
 Matrix dim: 129 and n0: 64
-multiply time 0.036107s 
+0.036107s 
 Matrix dim: 257 and n0: 4
-multiply time 3.103687s 
+3.103687s 
 Matrix dim: 257 and n0: 8
-multiply time 1.069750s 
+1.069750s 
 Matrix dim: 257 and n0: 16
-multiply time 0.541560s 
+0.541560s 
 Matrix dim: 257 and n0: 32
-multiply time 0.352366s 
+0.352366s 
 Matrix dim: 257 and n0: 64
-multiply time 0.281105s 
+0.281105s 
 Matrix dim: 513 and n0: 4
-multiply time 21.123632s 
+21.123632s 
 Matrix dim: 513 and n0: 8
-multiply time 7.584965s 
+7.584965s 
 Matrix dim: 513 and n0: 16
-multiply time 3.780654s 
+3.780654s 
 Matrix dim: 513 and n0: 32
-multiply time 2.507456s 
+2.507456s 
 Matrix dim: 513 and n0: 64
-multiply time 2.005628s 
+2.005628s 
 Matrix dim: 1025 and n0: 4
-multiply time 1082.495558s 
+1082.495558s 
 Matrix dim: 1025 and n0: 8
-multiply time 59.537838s 
+59.537838s 
 Matrix dim: 1025 and n0: 16
-multiply time 29.644674s 
+29.644674s 
 Matrix dim: 1025 and n0: 32
-multiply time 18.908861s 
+18.908861s 
 Matrix dim: 1025 and n0: 64
-multiply time 14.753756s 
+14.753756s 
 Matrix dim: 2049 and n0: 4
-multiply time 1112.910382s 
+1112.910382s 
 Matrix dim: 2049 and n0: 8
-multiply time 400.587142s 
+400.587142s 
 Matrix dim: 2049 and n0: 16
-multiply time 196.708572s 
+196.708572s 
 Matrix dim: 2049 and n0: 32
-multiply time 128.346202s 
+128.346202s 
 Matrix dim: 2049 and n0: 64
-multiply time 104.573740s 
+104.573740s 
 Matrix dim: 96 and n0: 4
-multiply time 0.089224s 
+0.089224s 
 Matrix dim: 96 and n0: 8
-multiply time 0.030109s 
+0.030109s 
 Matrix dim: 96 and n0: 16
-multiply time 0.038288s 
+0.038288s 
 Matrix dim: 96 and n0: 32
-multiply time 0.023694s 
+0.023694s 
 Matrix dim: 96 and n0: 64
-multiply time 0.016058s 
+0.016058s 
 Matrix dim: 192 and n0: 4
-multiply time 0.470781s 
+0.470781s 
 Matrix dim: 192 and n0: 8
-multiply time 0.145358s 
+0.145358s 
 Matrix dim: 192 and n0: 16
-multiply time 0.117211s 
+0.117211s 
 Matrix dim: 192 and n0: 32
-multiply time 0.102200s 
+0.102200s 
 Matrix dim: 192 and n0: 64
-multiply time 0.095939s 
+0.095939s 
 Matrix dim: 384 and n0: 4
-multiply time 2.966584s 
+2.966584s 
 Matrix dim: 384 and n0: 8
-multiply time 1.012147s 
+1.012147s 
 Matrix dim: 384 and n0: 16
-multiply time 0.813779s 
+0.813779s 
 Matrix dim: 384 and n0: 32
-multiply time 0.713460s 
+0.713460s 
 Matrix dim: 384 and n0: 64
-multiply time 0.714609s 
+0.714609s 
 Matrix dim: 768 and n0: 4
-multiply time 20.751702s 
+20.751702s 
 Matrix dim: 768 and n0: 8
-multiply time 6.976393s 
+6.976393s 
 Matrix dim: 768 and n0: 16
-multiply time 5.529456s 
+5.529456s 
 Matrix dim: 768 and n0: 32
-multiply time 4.959315s 
+4.959315s 
 Matrix dim: 768 and n0: 64
-multiply time 4.931700s 
+4.931700s 
 Matrix dim: 1536 and n0: 4
-multiply time 150.933527s 
+150.933527s 
 Matrix dim: 1536 and n0: 8
-multiply time 54.786544s 
+54.786544s 
 Matrix dim: 1536 and n0: 16
-multiply time 43.863835s 
+43.863835s 
 Matrix dim: 1536 and n0: 32
-multiply time 36.626952s 
+36.626952s 
 Matrix dim: 1536 and n0: 64
-multiply time 35.936158s 
+35.936158s 
