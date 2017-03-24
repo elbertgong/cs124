@@ -209,7 +209,8 @@ int main(int argc, char** argv) {
 
     if (flag == 1) {
         // test multiple crossover points
-        for(int x = 4; x <= 64; x *= 2) {
+        //for(int x = 4; x <= 64; x *= 2) {
+        for(int x = 20; x <= 200; x+=2) {
             n0 = x;
             struct timeval time0, time1;
             gettimeofday(&time0, NULL);
